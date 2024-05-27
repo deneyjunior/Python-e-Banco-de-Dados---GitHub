@@ -1,28 +1,28 @@
-import mysql.connector
-from mysql.connector import Error
+import psycopg2
+from psycopg2 import sql
+from psycopg2 import Error
 from tabulate import tabulate
 
 # Função para conectar ao banco de dados
 def conectar():
     try:
-        conn = mysql.connector.connect(
+        conn = psycopg2.connect(
             host="localhost",
-            user="root",
-            password="1a2b",
-            database="pmysql"
+            user="seu_usuario",
+            password="sua_senha",
+            database="seu_banco_de_dados"
         )
-        if conn.is_connected():
-            print("Conexão ao banco de dados MySQL foi bem-sucedida.")
-            return conn
+        print("Conexão ao banco de dados PostgreSQL foi bem-sucedida.")
+        return conn
     except Error as e:
-        print(f"Erro ao conectar ao MySQL: {e}")
+        print(f"Erro ao conectar ao PostgreSQL: {e}")
         return None
 
 # Função para desconectar do banco de dados
 def desconectar(conn):
-    if conn.is_connected():
+    if conn:
         conn.close()
-        print("Conexão ao MySQL foi encerrada.")
+        print("Conexão ao PostgreSQL foi encerrada.")
 
 def menu():
     while True:
@@ -108,3 +108,18 @@ def deletar_produto():
         finally:
             cursor.close()
             desconectar(conn)
+
+if __name__ == "__main__":
+    while True:
+        opcao = menu()
+        if opcao == 1:
+            criar_produto()
+        elif opcao == 2:
+            ler_produtos()
+        elif opcao == 3:
+            atualizar_produto()
+        elif opcao == 4:
+            deletar_produto()
+        elif opcao == 5:
+            print("Saindo...")
+            break
